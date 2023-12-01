@@ -3,6 +3,30 @@ pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
+interface IUniswapV2Router {
+    function swapExactTokensForTokens(
+      uint amountIn,
+      uint amountOutMin,
+      address[] calldata path,
+      address to,
+      uint deadline
+    ) external returns (uint[] memory amounts);
+    
+    function swapTokensForExactTokens(
+      uint amountOut,
+      uint amountInMax,
+      address[] calldata path,
+      address to,
+      uint deadline
+    ) external returns (uint[] memory amounts);
+  }
+
+  interface IWETH is IERC20 {
+    function deposit() external payable;
+
+    function withdraw(uint amount) external;
+  }
+
 contract UniswapV2SwapExample {
   address private constant UNISWAP_V2_ROUTER = 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D;
 
@@ -27,7 +51,7 @@ contract UniswapV2SwapExample {
     path[0] = WETH;
     path[1] = DAI;
 
-    uint[] memory amounts = router.swapExactTokensForToekns(
+    uint[] memory amounts = router.swapExactTokensForTokens(
       amountIn,
       amountOutMin,
       path,
@@ -123,28 +147,5 @@ contract UniswapV2SwapExample {
 
     return amounts[2];
   }
-
-  interface IUniswapV2Router {
-    function swapExactTokensForTokens(
-      uint amountIn,
-      uint amountOutMin,
-      address[] calldata path,
-      address to,
-      uint deadline
-    ) external returns (uint[] memory amounts);
-    
-    function swapTokensForExactTokens(
-      uint amountOut,
-      uint amountInMax,
-      address[] calldata path,
-      address to,
-      uint deadline
-    ) external returns (uint[] memory amounts);
-  }
-
-  interface IWETH is IERC20 {
-    function deposit() external payable;
-
-    function withdraw(uint amount) external;
-  }
 }
+
